@@ -412,4 +412,5 @@ Khi nâng cấp production, nên thêm:
 - thêm VPS provisioning adapter thật
 - thêm webhook payment cho VNPay, Momo, ZaloPay
 - thêm test automation
+- sản phẩm có dữ liệu database
 
