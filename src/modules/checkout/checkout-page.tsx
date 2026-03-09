@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useCartStore } from "@/hooks/use-cart-store";
-import { CheckoutForm } from "@/components/forms/checkout-form";
-import { OrderSummary } from "@/components/forms/order-summary";
+import { CheckoutForm } from "../../components/forms/checkout-form";
+import { OrderSummary } from "../../components/forms/order-summary";
 import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { calculateOrderTotals } from "@/utils/order-totals";
 
 export function CheckoutPage() {
@@ -50,9 +51,19 @@ export function CheckoutPage() {
     [discount, items]
   );
 
+  if (!items.length) {
+    return (
+      <EmptyState
+        title="Chưa có sản phẩm để thanh toán"
+        description="Thêm dịch vụ vào giỏ hàng trước khi chuyển sang bước thanh toán."
+        ctaLabel="Xem danh sách sản phẩm"
+      />
+    );
+  }
+
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
-      <CheckoutForm />
+      <CheckoutForm total={totals.total} />
       <div className="space-y-4">
         <OrderSummary
           subtotal={totals.subtotal}
@@ -62,7 +73,7 @@ export function CheckoutPage() {
         <Card>
           <h3 className="text-xl font-bold text-ink">Trạng thái</h3>
           <p className="mt-4 text-sm leading-7 text-muted">
-            Lớp thanh toán được tách riêng để tích hợp VNPay, MoMo, ZaloPay và tiền mã hóa sau này.
+            Luồng checkout đã có mô phỏng xử lý, callback thành công hoặc thất bại để bạn hoàn thiện trải nghiệm thanh toán trước khi nối gateway thật.
           </p>
         </Card>
       </div>

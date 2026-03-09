@@ -15,6 +15,7 @@ export const orders: Order[] = [
       {
         id: "item-01",
         productId: "prod-vps-basic",
+        type: "VPS",
         quantity: 1,
         unitPrice: 189000,
         totalPrice: 189000
@@ -22,6 +23,7 @@ export const orders: Order[] = [
       {
         id: "item-02",
         productId: "prod-steam-wallet",
+        type: "GIFTCARD",
         quantity: 1,
         unitPrice: 200000,
         totalPrice: 200000
@@ -104,6 +106,7 @@ export const orders: Order[] = [
       {
         id: "item-03",
         productId: "prod-cloud-gaming",
+        type: "CLOUD",
         quantity: 1,
         unitPrice: 599000,
         totalPrice: 599000
@@ -156,6 +159,7 @@ export const orders: Order[] = [
       {
         id: "item-04",
         productId: "prod-garena",
+        type: "GAMECARD",
         quantity: 1,
         unitPrice: 100000,
         totalPrice: 100000

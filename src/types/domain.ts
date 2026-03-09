@@ -78,6 +78,17 @@ export interface ProductSpecs {
   region?: string;
 }
 
+export interface ProductConfigurationOption {
+  id: string;
+  label: string;
+  description?: string;
+  price: number;
+  compareAtPrice?: number;
+  isPopular?: boolean;
+  specs?: ProductSpecs;
+  highlights?: string[];
+}
+
 export interface ProductImage {
   id: string;
   productId: string;
@@ -106,6 +117,7 @@ export interface Product extends SeoFields {
   reviewsCount: number;
   stock?: number;
   denominationOptions?: Array<{ label: string; value: number }>;
+  configurationOptions?: ProductConfigurationOption[];
   isFeatured: boolean;
   isHot: boolean;
   isPromotion: boolean;
@@ -230,9 +242,13 @@ export interface OrderItem {
   productId: string;
   productName?: string;
   productSlug?: string;
+  type?: ProductType;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  configurationId?: string;
+  configurationLabel?: string;
+  configurationSummary?: string;
 }
 
 export interface TimelineEvent {
@@ -317,6 +333,9 @@ export interface CartItem {
   quantity: number;
   type: ProductType;
   image?: string;
+  configurationId?: string;
+  configurationLabel?: string;
+  configurationSummary?: string;
 }
 
 export interface Cart {

@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { publicNavItems } from "@/config/site";
+import { useCartStore } from "@/hooks/use-cart-store";
 import { Logo } from "@/components/layout/logo";
 import { MegaMenu } from "@/components/layout/mega-menu";
 import { UserAvatar } from "@/components/shared/user-avatar";
@@ -47,6 +48,7 @@ export function MainHeader() {
   const closeDelay = 160;
   const router = useRouter();
   const pathname = usePathname();
+  const cartItems = useCartStore((state) => state.items);
   const [scrolled, setScrolled] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
@@ -180,6 +182,7 @@ export function MainHeader() {
   const securityHref = getSecurityHrefByRole(currentUser?.role);
   const showDashboardLink = isManagementRole(currentUser?.role);
   const logoHref = pathname === "/" ? "/" : "/marketplace";
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header
@@ -212,12 +215,20 @@ export function MainHeader() {
                 </Link>
               </>
             ) : null}
-            <motion.button
-              whileHover={{ y: -2, scale: 1.03 }}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink shadow-sm"
-            >
-              <FontAwesomeIcon icon={faCartShopping} className="h-5 w-5" />
-            </motion.button>
+            <motion.div whileHover={{ y: -2, scale: 1.03 }}>
+              <Link
+                href="/cart"
+                className="relative flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink shadow-sm"
+                aria-label="Mở giỏ hàng"
+              >
+                <FontAwesomeIcon icon={faCartShopping} className="h-5 w-5" />
+                {cartCount > 0 ? (
+                  <span className="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-white">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                ) : null}
+              </Link>
+            </motion.div>
             <div
               ref={notificationMenuRef}
               className="relative"

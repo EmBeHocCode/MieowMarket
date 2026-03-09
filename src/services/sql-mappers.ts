@@ -10,6 +10,7 @@ import type {
   Order,
   Payment,
   Product,
+  ProductConfigurationOption,
   Review,
   ServiceRecord,
   SiteSetting,
@@ -209,8 +210,25 @@ export function mapPrismaProduct(product: {
   }>;
 }): Product {
   const metadata = product.metadata as
-    | { denominationOptions?: Array<{ label: string; value: number }> }
+    | {
+        denominationOptions?: Array<{ label: string; value: number }>;
+        configurationOptions?: ProductConfigurationOption[];
+      }
     | null;
+
+  const configurationOptions = metadata?.configurationOptions?.map((option) => ({
+    ...option,
+    specs: option.specs ?? undefined,
+    highlights: option.highlights ?? []
+  }));
+
+  const minConfiguredPrice = configurationOptions?.length
+    ? Math.min(...configurationOptions.map((option) => option.price))
+    : undefined;
+
+  const maxConfiguredPrice = configurationOptions?.length
+    ? Math.max(...configurationOptions.map((option) => option.price))
+    : undefined;
 
   return {
     id: product.id,
@@ -235,6 +253,8 @@ export function mapPrismaProduct(product: {
     rating: product.rating,
     reviewsCount: product.reviewsCount,
     stock: product.stock,
+    minPrice: minConfiguredPrice,
+    maxPrice: maxConfiguredPrice,
     isFeatured: product.isFeatured,
     isHot: product.isHot,
     isPromotion: product.isPromotion,
@@ -244,6 +264,7 @@ export function mapPrismaProduct(product: {
     updatedAt: product.updatedAt.toISOString(),
     tags: product.tags,
     denominationOptions: metadata?.denominationOptions,
+    configurationOptions,
     seoTitle: product.seoTitle ?? undefined,
     seoDescription: product.seoDescription ?? undefined,
     ogImage: product.ogImage ?? undefined,
@@ -461,9 +482,11 @@ export function mapPrismaOrder(order: {
   items: Array<{
     id: string;
     productId: string;
+    metadata: Prisma.JsonValue | null;
     product: {
       name: string;
       slug: string;
+      type: "VPS" | "CLOUD" | "GIFTCARD" | "GAMECARD" | "DIGITAL";
     };
     quantity: number;
     unitPrice: Prisma.Decimal;
@@ -530,15 +553,31 @@ export function mapPrismaOrder(order: {
     note: order.note ?? undefined,
     adminNote: order.adminNote ?? undefined,
     supportTicketId: order.supportTickets?.[0]?.id,
-    items: order.items.map((item) => ({
-      id: item.id,
-      productId: item.productId,
-      productName: item.product.name,
-      productSlug: item.product.slug,
-      quantity: item.quantity,
-      unitPrice: decimalToNumber(item.unitPrice),
-      totalPrice: decimalToNumber(item.totalPrice)
-    })),
+    items: order.items.map((item) => {
+      const configuration = (item.metadata as
+        | {
+            configuration?: {
+              id?: string;
+              label?: string;
+              summary?: string;
+            };
+          }
+        | null)?.configuration;
+
+      return {
+        id: item.id,
+        productId: item.productId,
+        productName: item.product.name,
+        productSlug: item.product.slug,
+        type: item.product.type,
+        quantity: item.quantity,
+        unitPrice: decimalToNumber(item.unitPrice),
+        totalPrice: decimalToNumber(item.totalPrice),
+        configurationId: configuration?.id,
+        configurationLabel: configuration?.label,
+        configurationSummary: configuration?.summary
+      };
+    }),
     payment,
     assignedCodes,
     serviceRecords,

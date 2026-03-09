@@ -11,7 +11,8 @@ const orderInclude = {
       product: {
         select: {
           name: true,
-          slug: true
+          slug: true,
+          type: true
         }
       }
     }

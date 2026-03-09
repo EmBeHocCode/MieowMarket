@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
@@ -7,9 +8,24 @@ import type { Product } from "@/types/domain";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useCartStore } from "@/hooks/use-cart-store";
 import { formatCurrency } from "@/utils/format";
+import { mapProductToCartItem } from "@/utils/cart";
+import { getDefaultProductConfiguration, getProductDisplayMaxPrice, getProductDisplayPrice } from "@/utils/product";
 
 export function ProductCard({ product }: { product: Product }) {
+  const addItem = useCartStore((state) => state.addItem);
+  const [added, setAdded] = useState(false);
+  const defaultConfiguration = getDefaultProductConfiguration(product);
+  const minPrice = getProductDisplayPrice(product);
+  const maxPrice = getProductDisplayMaxPrice(product);
+
+  const handleAddToCart = () => {
+    addItem(mapProductToCartItem(product, 1, defaultConfiguration));
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 1400);
+  };
+
   return (
     <motion.div whileHover={{ y: -6 }}>
       <Card className="group flex h-full flex-col gap-4 border border-white/80 p-5 transition duration-300 hover:border-primary/30 hover:shadow-premium">
@@ -37,11 +53,19 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="flex items-end justify-between gap-3">
             <div>
               <p className="text-sm text-muted">Từ</p>
-              <p className="text-2xl font-bold text-ink">{formatCurrency(product.price)}</p>
+              <p className="text-2xl font-bold text-ink">{formatCurrency(minPrice)}</p>
+              {maxPrice > minPrice ? (
+                <p className="mt-1 text-xs text-muted">Tối đa {formatCurrency(maxPrice)}</p>
+              ) : null}
             </div>
-            <Button href={`/products/${product.slug}`} variant="outline">
-              Xem chi tiết
-            </Button>
+            <div className="flex flex-wrap justify-end gap-2">
+              <Button type="button" onClick={handleAddToCart}>
+                {added ? "Đã thêm" : "Thêm giỏ"}
+              </Button>
+              <Button href={`/products/${product.slug}`} variant="outline">
+                Xem chi tiết
+              </Button>
+            </div>
           </div>
         </div>
       </Card>

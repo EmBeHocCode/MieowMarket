@@ -2,60 +2,35 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { CartItem as DomainCartItem } from "@/types/domain";
 
-interface CartItem {
-  productId: string;
-  name: string;
-  slug: string;
-  price: number;
-  quantity: number;
-  type: string;
-}
+type CartItem = DomainCartItem;
 
 interface CartState {
   items: CartItem[];
   couponCode: string;
   addItem: (item: CartItem) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeItem: (productId: string) => void;
+  updateQuantity: (itemId: string, quantity: number) => void;
+  removeItem: (itemId: string) => void;
   setCouponCode: (value: string) => void;
   clearCart: () => void;
 }
 
-const starterCart: CartItem[] = [
-  {
-    productId: "prod-vps-basic",
-    name: "VPS Basic",
-    slug: "vps-basic",
-    price: 189000,
-    quantity: 1,
-    type: "VPS"
-  },
-  {
-    productId: "prod-steam-wallet",
-    name: "Steam Wallet 200K",
-    slug: "steam-wallet-200k",
-    price: 200000,
-    quantity: 1,
-    type: "GIFTCARD"
-  }
-];
-
 export const useCartStore = create<CartState>()(
   persist(
     (set) => ({
-      items: starterCart,
-      couponCode: "MEOW10",
+      items: [],
+      couponCode: "",
       addItem: (item) =>
         set((state) => {
           const existing = state.items.find(
-            (cartItem) => cartItem.productId === item.productId
+            (cartItem) => cartItem.id === item.id
           );
 
           if (existing) {
             return {
               items: state.items.map((cartItem) =>
-                cartItem.productId === item.productId
+                cartItem.id === item.id
                   ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
                   : cartItem
               )
@@ -64,17 +39,17 @@ export const useCartStore = create<CartState>()(
 
           return { items: [...state.items, item] };
         }),
-      updateQuantity: (productId, quantity) =>
+      updateQuantity: (itemId, quantity) =>
         set((state) => ({
           items: state.items.map((item) =>
-            item.productId === productId
-              ? { ...item, quantity: Math.max(1, quantity) }
+            item.id === itemId
+              ? { ...item, quantity: Number.isFinite(quantity) ? Math.max(1, quantity) : item.quantity }
               : item
           )
         })),
-      removeItem: (productId) =>
+      removeItem: (itemId) =>
         set((state) => ({
-          items: state.items.filter((item) => item.productId !== productId)
+          items: state.items.filter((item) => item.id !== itemId)
         })),
       setCouponCode: (couponCode) => set({ couponCode }),
       clearCart: () => set({ items: [], couponCode: "" })

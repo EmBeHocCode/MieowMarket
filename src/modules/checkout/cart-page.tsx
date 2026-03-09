@@ -67,17 +67,23 @@ export function CartPage() {
     <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
       <div className="space-y-4">
         {items.map((item) => (
-          <Card key={item.productId} className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <Card key={item.id} className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-lg font-bold text-ink">{item.name}</p>
               <p className="mt-1 text-sm text-muted">{item.type}</p>
+              {item.configurationLabel ? (
+                <p className="mt-2 text-sm font-medium text-ink">{item.configurationLabel}</p>
+              ) : null}
+              {item.configurationSummary ? (
+                <p className="mt-1 text-sm text-muted">{item.configurationSummary}</p>
+              ) : null}
             </div>
             <div className="flex items-center gap-4">
               <input
                 type="number"
                 min={1}
                 value={item.quantity}
-                onChange={(event) => updateQuantity(item.productId, Number(event.target.value))}
+                onChange={(event) => updateQuantity(item.id, Number(event.target.value))}
                 className="w-20 rounded-2xl border border-rose-100 px-3 py-2 outline-none"
               />
               <p className="w-32 text-right font-semibold text-ink">
@@ -85,7 +91,7 @@ export function CartPage() {
               </p>
               <button
                 type="button"
-                onClick={() => removeItem(item.productId)}
+                onClick={() => removeItem(item.id)}
                 className="rounded-full bg-rose-50 px-4 py-2 text-sm font-semibold text-primary"
               >
                 Xóa
