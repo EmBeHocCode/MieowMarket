@@ -240,16 +240,36 @@ npm run prisma:seed
 npm run dev
 ```
 
-## 11. Hướng nâng cấp tiếp theo
+## 11. Mục tiêu phát triển tiếp theo
+
+### Giai đoạn 1: Hoàn thiện trải nghiệm người dùng
 
 - thay auth dev bằng Auth.js hoặc JWT thật
-- chuyển orders, payments, tickets sang Prisma hoàn toàn
-- thêm product CRUD thật ở admin
-- thêm upload media thật bằng Cloudinary hoặc S3
-- thêm seed SQL sản phẩm hoặc admin create product flow
-- gắn payment gateway thật
-- gắn email service thật
-- gắn VPS provisioning provider thật
+- hoàn thiện toàn bộ flow đăng ký, đăng nhập, quên mật khẩu, đặt lại mật khẩu
+- hoàn thiện order detail, payment detail và lịch sử mua hàng
+- dọn nốt các trang public để trạng thái loading, empty, error đồng nhất
+
+### Giai đoạn 2: Hoàn thiện vận hành thương mại
+
+- thêm CRUD thật cho sản phẩm, danh mục, banner, coupon và media trong admin
+- gắn payment gateway thật cho VNPay, MoMo, ZaloPay
+- thêm webhook thanh toán và đồng bộ trạng thái đơn tự động
+- gắn email service cho đơn hàng, gift card delivery và reset password
+- nối VPS provisioning với provider API thật
+
+### Giai đoạn 3: Hoàn thiện vận hành nội bộ
+
+- mở rộng audit log
+- thêm search, filter, pagination chuẩn cho toàn bộ admin tables
+- thêm notification center tốt hơn cho admin và user
+- mở rộng analytics dashboard theo doanh thu, tồn kho và tăng trưởng user
+
+### Giai đoạn 4: Tối ưu scale và production
+
+- thêm test automation
+- seed thêm dữ liệu thật hơn cho sản phẩm, đơn hàng, thanh toán và ticket
+- tối ưu hiệu năng, SEO, cache và monitoring
+- chuẩn bị tách backend riêng nếu quy mô lớn hơn
 - kết nối Next.js API với FastAPI AI service
 
 ## 12. Kiểm tra gần nhất

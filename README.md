@@ -384,29 +384,39 @@ Những phần này đã được tách riêng để sau này thay bằng:
 - CRUD APIs
 - queue / webhook / external provider integrations
 
-## Kiến trúc mở rộng tiếp theo
+## Mục tiêu và kế hoạch phát triển tiếp theo
+
+### Giai đoạn 1: Hoàn thiện tính năng lõi
 
 - thay auth dev bằng Auth.js hoặc JWT thật
-- chuyển order, payment, ticket sang Prisma hoàn toàn
-- thêm product CRUD thật ở admin
-- upload media thật bằng Cloudinary hoặc S3
-- thêm seed sản phẩm SQL hoặc admin create product flow
-- gắn payment gateways thật
-- gắn email service thật
-- gắn VPS provisioning provider thật
-- kết nối Next.js API với FastAPI AI service
+- hoàn thiện CRUD sản phẩm, danh mục, banner và coupon trong admin
+- bổ sung trang chi tiết đơn hàng và chi tiết thanh toán đầy đủ
+- thêm upload ảnh thật cho sản phẩm, banner, logo và avatar
+- chuẩn hóa empty state, loading state và trạng thái lỗi ở toàn bộ public pages
 
-## Hướng mở rộng tiếp theo
+### Giai đoạn 2: Hoàn thiện vận hành thương mại
 
-- tích hợp auth thật bằng NextAuth hoặc JWT
-- kết nối PostgreSQL thật và seed data Prisma
-- thêm upload banner / product image
-- thêm order detail page đầy đủ
-- thêm email service thật cho gift card delivery
-- thêm VPS provisioning adapter thật
-- thêm webhook payment cho VNPay, MoMo, ZaloPay
-- thêm test automation
-- bổ sung thêm dữ liệu sản phẩm trong database
+- gắn payment gateway thật cho VNPay, MoMo và ZaloPay
+- thêm webhook thanh toán và đồng bộ trạng thái đơn tự động
+- gắn email service cho xác nhận đơn, giao mã gift card và reset mật khẩu
+- hoàn thiện gift card inventory flow với nhập mã, reserve mã, sold log và delivery log
+- hoàn thiện VPS provisioning adapter để nối với nhà cung cấp thật
+
+### Giai đoạn 3: Mở rộng dashboard và vận hành nội bộ
+
+- hoàn thiện admin tables thành CRUD đầy đủ có filter, search và pagination
+- thêm audit log chi tiết hơn cho user, order, payment và media
+- thêm notification center realtime hoặc polling tốt hơn
+- bổ sung dashboard analytics theo doanh thu, tồn kho, sản phẩm bán chạy và tăng trưởng người dùng
+- thêm vai trò và phân quyền chi tiết hơn ngoài `USER` và `ADMIN`
+
+### Giai đoạn 4: Tối ưu chất lượng và scale
+
+- thêm test automation cho auth, checkout, order flow và admin flow
+- bổ sung seed dữ liệu phong phú hơn cho sản phẩm, đơn hàng và ticket
+- chuẩn bị tách backend riêng nếu cần, ví dụ NestJS hoặc service nội bộ
+- kết nối Next.js API với FastAPI AI service cho AI tools
+- tối ưu SEO, hiệu năng, cache và triển khai production
 
 ## Kiểm tra chất lượng
 
