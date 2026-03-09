@@ -396,6 +396,18 @@ Những phần này đã được tách riêng để sau này thay bằng:
 - gắn VPS provisioning provider thật
 - kết nối Next.js API với FastAPI AI service
 
+## Hướng mở rộng tiếp theo
+
+- tích hợp auth thật bằng NextAuth hoặc JWT
+- kết nối PostgreSQL thật và seed data Prisma
+- thêm upload banner / product image
+- thêm order detail page đầy đủ
+- thêm email service thật cho gift card delivery
+- thêm VPS provisioning adapter thật
+- thêm webhook payment cho VNPay, MoMo, ZaloPay
+- thêm test automation
+- bổ sung thêm dữ liệu sản phẩm trong database
+
 ## Kiểm tra chất lượng
 
 Đã kiểm tra:
